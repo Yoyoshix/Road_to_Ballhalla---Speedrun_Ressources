@@ -141,7 +141,7 @@ int main()
 
     if (ENB_DIFF == 1)              //Store the first result for diff
         for (i = 0; i < UNIT; i++)
-            diff[i] = result[0][i];
+            diff[i] = result[total - 1][i];
 
     for (i = 0; (i < MAX_RESULT) && (time[i] > 0); i++)     //Display all the solutions
     {
