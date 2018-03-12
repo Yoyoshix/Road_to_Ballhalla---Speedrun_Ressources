@@ -169,7 +169,7 @@ int main()
         cout << " <= diff" << endl;
     }
     
-    if (total >= 1000)              //If true either decrease RANGE_TIME or increase MAX_RESULT
+    if (total >= MAX_RESULT)              //If true either decrease RANGE_TIME or increase MAX_RESULT
         cout << endl << "TOTAL exceded MAX_RESULT" << endl << endl; 
 
     cout << endl << "Calul done in " << time_end - time_start << "ms" << endl;
