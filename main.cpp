@@ -25,8 +25,8 @@ ENB_DIFF is a feature that show where all the solutions have the same pattern
     If the solutions displayed are "103311, 104311, 103301" ENB_DIFF will display "10 3 1". Blank space means the solution changed
 **/
 #define UNIT 20
-#define RANGE_TIME 8000
-#define MAX_RESULT 100
+#define RANGE_TIME 3000
+#define MAX_RESULT 1000
 #define ENB_DIFF 1
 
 /** "values" array store the time difference for every level between any% and the category
