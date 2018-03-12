@@ -16,18 +16,18 @@ Solutions are displayed at the end
 
 using namespace std;
 
-#define UNIT 20
-#define RANGE_TIME 8000
-#define MAX_RESULT 1000
-#define ENB_DIFF 1
 /**
 UNIT is number of element, just let this at 20 because there will always be 20 levels
-RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution found
-MAX_RESULT is needed to limit the number of result and arrays size. Let it at 1000, more if you want to have fun
+RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution
+MAX_RESULT is needed to limit the number of result and arrays size. Let it at 100, more if you want to have fun but there is no real purpose
 ENB_DIFF is a feature that show where all the solutions have the same pattern
     very useful to see which level doesn't change whatever the route is.
     Exemple : if the solutions are "103310, 104311, 103301" ENB_DIFF will display "10 3 1". There is a blank space where solution change
 **/
+#define UNIT 20
+#define RANGE_TIME 8000
+#define MAX_RESULT 100
+#define ENB_DIFF 1
 
 /** "values" array store the time difference for every level between any% and the category
 If you need 2 seconds more than any% to get the 60% reward on level 3 you'll write 2000 inside the array on the second column of the third row
@@ -147,7 +147,7 @@ int main()
             for (j = 0; j < UNIT; j++)
             {
                 cout << result[i][j];
-                if (ENB_DIFF == 1 && result[i][j] != diff[j])   //Check if the result if different with diff
+                if (ENB_DIFF == 1 && result[i][j] != diff[j])   //Check if the result is different with diff
                     diff[j] = -1;                               //-1 means there is a diff
             }
             cout << " " << time[i] << " +" << time[i] - lowest_res << endl;
