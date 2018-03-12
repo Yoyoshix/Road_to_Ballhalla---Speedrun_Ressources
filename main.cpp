@@ -166,9 +166,8 @@ int main()
     }
     
     if (total >= MAX_RESULT)
-        cout << endl << "TOTAL exceded MAX_RESULT   Increase MAX_RESULT or descrease RANGE_TIME" << endl << endl; 
-
-    cout << endl << "Calul done in " << time_end - time_start << "ms with " << total << endl;
+        cout << endl << "TOTAL exceded MAX_RESULT   Increase MAX_RESULT or descrease RANGE_TIME" << endl; 
+    cout << endl << "Calul done in " << time_end - time_start << "ms with " << total << " solutions" << endl;
 
     return (0);
 }
