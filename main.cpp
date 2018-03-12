@@ -19,10 +19,10 @@ using namespace std;
 /**
 UNIT is number of element, just let this at 20 because there will always be 20 levels
 RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution
-MAX_RESULT is needed to limit the number of result and arrays size. Let it at 100, more if you want to have fun but there is no real purpose
+MAX_RESULT is needed to limit the number of result and arrays size. Let it at 100, more if you want but there is no real purpose
 ENB_DIFF is a feature that show where all the solutions have the same pattern
     very useful to see which level doesn't change whatever the route is.
-    Exemple : if the solutions are "103310, 104311, 103301" ENB_DIFF will display "10 3 1". There is a blank space where solution change
+    If the solutions displayed are "103311, 104311, 103301" ENB_DIFF will display "10 3 1". Blank space means the solution changed
 **/
 #define UNIT 20
 #define RANGE_TIME 8000
@@ -30,9 +30,10 @@ ENB_DIFF is a feature that show where all the solutions have the same pattern
 #define ENB_DIFF 1
 
 /** "values" array store the time difference for every level between any% and the category
-If you need 2 seconds more than any% to get the 60% reward on level 3 you'll write 2000 inside the array on the second column of the third row
 In order : "any%, 60%, 80%, 90%, 100%" where the % is the orb completion for each levels
--1 is here to tell there is no solution with this level in this category. Make the computation faster, let -1 and not 0 if you have no value
+If you need 2 more seconds than any% to get the 60% reward on level 3 you'll write 2000 inside the array on 2nd col, 3rd row
+-1 is here to tell there is no solution in this level with this category.
+Make the computation faster, let -1 and not 0 if you have no value to put
 **/
 int values[UNIT][5] = {
     {0, 2000, 11000, 20000, 32000}, //1-1 0
@@ -83,7 +84,9 @@ int playgame(int (&data)[UNIT])
 }
 
 /** Recursive function (read at bottom for more information about how it works)
-(pos == unit) is the point where the route is done, it will check if the route is possible and if so will register the solution
+"data" is the route, "result" is solutions stored, "time" is time of solutions,
+    "lowest_res" is lowest time, "pos" is level (or depth of the rescursive function) and "total" is number of solutions
+(pos == UNIT) is the point where the route is done, it will check if the route is possible and if so will register the solution
 "else" will create the route and call the function itself
 **/
 void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MAX_RESULT], int &lowest_res, int pos, int &total)
@@ -94,7 +97,7 @@ void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MA
     if (pos == UNIT)
     {
         res = playgame(data);   //Route is done, let's check its validity
-        if (res > 0 && res - lowest_res <= RANGE_TIME)  //res > 0 means the solution is valid and we check if the time is inside the range
+        if (res > 0 && res - lowest_res <= RANGE_TIME)  //res > 0 means the route is valid and we check if the time is inside the range
         {
             total++;
             if (total <= MAX_RESULT)    //Just to be sure the number of solutions is not too much
