@@ -5,7 +5,6 @@ It will simply display the route which has the lowest total time registered insi
 Change the "values" array with your own times (in milliseconds) and run the program
 Since there is many (many many many) possible routes you can use the #define below to limit the number of possibilities
 If no solution is found you'll need to change some parameters like -1 (by real values inside the "values" array) or #defines
-
 Solutions are displayed at the end
 **/
 
@@ -18,15 +17,15 @@ using namespace std;
 
 /**
 UNIT is number of element, just let this at 20 because there will always be 20 levels
+MAX_RESULT is needed to limit arrays size. Let it at 1000, that's enough. Less could create problem
 RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution
-MAX_RESULT is needed to limit the number of result and arrays size. Let it at 100, more if you want but there is no real purpose
 ENB_DIFF is a feature that show where all the solutions have the same pattern
     very useful to see which level doesn't change whatever the route is.
     If the solutions displayed are "103311, 104311, 103301" ENB_DIFF will display "10 3 1". Blank space means the solution changed
 **/
 #define UNIT 20
-#define RANGE_TIME 3000
 #define MAX_RESULT 1000
+#define RANGE_TIME 3000
 #define ENB_DIFF 1
 
 /** "values" array store the time difference for every level between any% and the category
@@ -97,17 +96,14 @@ void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MA
     if (pos == UNIT)
     {
         res = playgame(data);   //Route is done, let's check its validity
-        if (res > 0 && res - lowest_res <= RANGE_TIME)  //res > 0 means the route is valid and we check if the time is inside the range
+        if (res > 0 && res - lowest_res <= RANGE_TIME && total < MAX_RESULT)  //res > 0 means the route is valid and we check if the time is inside the range
         {
             total++;
-            if (total <= MAX_RESULT)    //Just to be sure the number of solutions is not too much
-            {
-                for (i = 0; i < UNIT; i++)          //store the result
-                    result[total - 1][i] = data[i];
-                time[total - 1] = res;
-                if (lowest_res > res)   //We update the lowest result
-                    lowest_res = res;
-            }
+            for (i = 0; i < UNIT; i++)          //store the result
+                result[total - 1][i] = data[i];
+            time[total - 1] = res;
+            if (lowest_res > res)   //We update the lowest result
+                lowest_res = res;
         }
     }
     else
@@ -169,10 +165,10 @@ int main()
         cout << " <= diff" << endl;
     }
     
-    if (total >= MAX_RESULT)              //If true either decrease RANGE_TIME or increase MAX_RESULT
-        cout << endl << "TOTAL exceded MAX_RESULT" << endl << endl; 
+    if (total >= MAX_RESULT)
+        cout << endl << "TOTAL exceded MAX_RESULT   Increase MAX_RESULT or descrease RANGE_TIME" << endl << endl; 
 
-    cout << endl << "Calul done in " << time_end - time_start << "ms" << endl;
+    cout << endl << "Calul done in " << time_end - time_start << "ms with " << total << endl;
 
     return (0);
 }
@@ -180,13 +176,11 @@ int main()
 /**
 About the recursive function, if you don't know what it is the best is to look up on internet.
 It's kinda hard to explain and it's not the best to do this here with just plain text.
-
 set_data (the recursive function) is made to set every possibilities
 If you would like to do the same without a recursive function you could write something like 20 "for loops" inside themselves,
     which is not really good looking and efficient.
 With set_data I am able to optimize how it has to be done especially with the "-1".
     If some level has a -1 for its category it means you can skip to the next category, their is no meaning to compute an invalid route
-
 I'm not a master of C++, if you have recommendation about the code don't hesitate to talk.
 Just keep in mind this is a small program for a unique purpose, I won't make a GUI for it.
 **/
