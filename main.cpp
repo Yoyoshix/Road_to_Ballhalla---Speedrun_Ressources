@@ -96,8 +96,8 @@ void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MA
     if (pos == UNIT)
     {
         res = playgame(data);   //Route is done, let's check its validity
-        if (res > 0 && res - lowest_res <= RANGE_TIME && total < MAX_RESULT)  //res > 0 means the route is valid and we check if the time is inside the range
-        {
+        if (res > 0 && res - lowest_res <= RANGE_TIME && total < MAX_RESULT)
+        {                                       //res > 0 means the route is valid and we check if the time is inside the range
             total++;
             for (i = 0; i < UNIT; i++)          //store the result
                 result[total - 1][i] = data[i];
