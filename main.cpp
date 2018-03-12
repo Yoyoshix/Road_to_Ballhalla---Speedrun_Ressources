@@ -1,19 +1,18 @@
-/**
+/** Solution = Valid Route
 Program made to optimized route in Road to Ballhalla but could be use to similar purposes as well
-This program compute all possible solutions and display which is the best (or close to best) route
-It will simply display the solution which has the lowest total time registered inside "values" array
+This program compute all possible routes and display which is the best (or close to best) route
+It will simply display the route which has the lowest total time registered inside "values" array
 Change the "values" array with your own times (in milliseconds) and run the program
-Since there is many (many many many) possible solutions you can use the #define below to limit the number of solutions
-If no solution is found you'll need to change some parameters like -1 by real values inside the "values" array or #defines
+Since there is many (many many many) possible routes you can use the #define below to limit the number of possibilities
+If no solution is found you'll need to change some parameters like -1 (by real values inside the "values" array) or #defines
 
-Solutions displayed at the end respect the number of medals you need to get to finish the game
+Solutions are displayed at the end
 **/
 
 #include <iostream>
 #include <stdio.h>
 #include <vector>
 #include <time.h>
-#include <windows.h>
 
 using namespace std;
 
@@ -30,10 +29,10 @@ ENB_DIFF is a feature that show where all the solutions have the same pattern
     Exemple : if the solutions are "103310, 104311, 103301" ENB_DIFF will display "10 3 1". There is a blank space where solution change
 **/
 
-/** "values" array store the time difference for every level in their respective category about medal reward between any% and x%
-If you need 2 seconds more than any% to get the 60% reward you'll write 2000 inside the array etc.. for every category
+/** "values" array store the time difference for every level between any% and the category
+If you need 2 seconds more than any% to get the 60% reward on level 3 you'll write 2000 inside the array on the second column of the third row
 In order : "any%, 60%, 80%, 90%, 100%" where the % is the orb completion for each levels
--1 is here to tell there is no solution with this level in this category. Make the computation faster
+-1 is here to tell there is no solution with this level in this category. Make the computation faster, let -1 and not 0 if you have no value
 **/
 int values[UNIT][5] = {
     {0, 2000, 11000, 20000, 32000}, //1-1 0
@@ -70,7 +69,7 @@ int playgame(int (&data)[UNIT])
     for (i = 0; i < 20; i++)
     {
         sum += data[i];
-        if (sum < i/5)  //Just to make things with less code. Is equivalent to "after 5 more levels you'll change medals needed"
+        if (sum < i/5)  //Just to make things with less code. Is equivalent to "after 5 more levels you'll change medals needed by +5"
             return (0);
     }
     if (sum != 25) //You could finish the game with more than 25 medals but that would be a waste of time somewhere
@@ -85,7 +84,7 @@ int playgame(int (&data)[UNIT])
 
 /** Recursive function (read at bottom for more information about how it works)
 (pos == unit) is the point where the route is done, it will check if the route is possible and if so will register the solution
-"else" will create the route and call the function
+"else" will create the route and call the function itself
 **/
 void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MAX_RESULT], int &lowest_res, int pos, int &total)
 {
@@ -95,7 +94,7 @@ void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MA
     if (pos == UNIT)
     {
         res = playgame(data);   //Route is done, let's check its validity
-        if (res > 0 && res - lowest_res <= RANGE_TIME)  //res == 0 means the solution is wrong and we check if the time is inside the range
+        if (res > 0 && res - lowest_res <= RANGE_TIME)  //res > 0 means the solution is valid and we check if the time is inside the range
         {
             total++;
             if (total <= MAX_RESULT)    //Just to be sure the number of solutions is not too much
@@ -125,22 +124,17 @@ int main()
     int i;
     int j;
     int data[UNIT];                 //Store the route
-    int result[MAX_RESULT][UNIT];   //Store all possible route
-    int time[MAX_RESULT] = {0};     //Store the time of the solution
-    int lowest_res = 1000000;       //Store the time of the lowest solution. Related to RANGE_TIME
-    int total = 0;                  //Number of solutions
-    int diff[UNIT];                 //Store the diff. Related to ENB_DIFF
-    clock_t time_start;             //Just to know the time is took to compute all solutions
+    int result[MAX_RESULT][UNIT];   //Store all valid routes
+    int time[MAX_RESULT] = {0};     //Store the time of solutions
+    int lowest_res = 12345678;      //Store the time of the lowest solution     Related to RANGE_TIME
+    int total = 0;                  //Number of solutions                       Related to MAX_RESULT
+    int diff[UNIT];                 //Store the diff                            Related to ENB_DIFF
+    clock_t time_start;             //Just to know the time it took to compute all solutions
     clock_t time_end;
 
     time_start = clock();           //Start the timer
-    set_data(data, result, time, lowest_res, 0, total); //Real shit begins with this
+    set_data(data, result, time, lowest_res, 0, total); //Everything begins with this
     time_end = clock();             //End the timer
-    if (total >= 1000)              //If true either decrease RANGE_TIME or increase MAX_RESULT
-    {
-        cout << "TOTAL exceded MAX_RESULT" << endl << endl;
-        Sleep(1000);
-    }
 
     if (ENB_DIFF == 1)              //Store the first result for diff
         for (i = 0; i < UNIT; i++)
@@ -159,15 +153,21 @@ int main()
             cout << " " << time[i] << " +" << time[i] - lowest_res << endl;
         }
     }
-
-    for (i = 0; ENB_DIFF == 1 && i < UNIT; i++)     //Display the diff result
+    
+    if (ENB_DIFF == 1)
     {
-        if (diff[i] != -1)
-            cout << diff[i];
-        else
-            cout << " ";
+        for (i = 0; i < UNIT; i++)     //Display the diff result
+        {
+            if (diff[i] != -1)
+                cout << diff[i];
+            else
+                cout << " ";
+        }
+        cout << " <= diff" << endl;
     }
-    cout << " <= diff" << endl;
+    
+    if (total >= 1000)              //If true either decrease RANGE_TIME or increase MAX_RESULT
+        cout << endl << "TOTAL exceded MAX_RESULT" << endl << endl; 
 
     cout << endl << "Calul done in " << time_end - time_start << "ms" << endl;
 
@@ -178,12 +178,12 @@ int main()
 About the recursive function, if you don't know what it is the best is to look up on internet.
 It's kinda hard to explain and it's not the best to do this here with just plain text.
 
-set_data (the recursive function) is made to set every possibilities.
-If you would like to do the same without a recursive function you could write something like 20 for loops inside themselves,
+set_data (the recursive function) is made to set every possibilities
+If you would like to do the same without a recursive function you could write something like 20 "for loops" inside themselves,
     which is not really good looking and efficient.
 With set_data I am able to optimize how it has to be done especially with the "-1".
-    If some level has a -1 in its category then you need to go to the next category, their is no meaning to continue to compute
+    If some level has a -1 for its category it means you can skip to the next category, their is no meaning to compute an invalid route
 
 I'm not a master of C++, if you have recommendation about the code don't hesitate to talk.
-Just keep in mind this is a small program for a unique purpose, I won't make a GUI for exemple.
+Just keep in mind this is a small program for a unique purpose, I won't make a GUI for it.
 **/
