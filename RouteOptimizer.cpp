@@ -20,15 +20,15 @@ UNIT is number of element, just let this at 20 because there will always be 20 l
 MAX_RESULT is needed to limit arrays size. Let it at 1000, that's enough. Less could create problem
 RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution
 ENB_DIFF is a feature that show where all the solutions have the same pattern
-    very useful to see which level doesn't change whatever the route is.
-    If the solutions displayed are "103311, 104311, 103301" ENB_DIFF will display "10 3 1". Blank space means the solution changed
+    very useful to see which part of the route remain the same whatever the set is
+    If the solutions displayed are [103311] [104311] [103301] ENB_DIFF will display [  ^ ^ ]. The ^ means the solution changed here
 **/
 #define UNIT 20
 #define MAX_RESULT 1000
 #define RANGE_TIME 3000
 #define ENB_DIFF 1
 
-/** "values" array store the time difference for every level between any% and the category
+/** "values" array store the time difference for every level with their any% (no medal). See the spreadsheet to get these values easily
 In order : "any%, 60%, 80%, 90%, 100%" where the % is the orb completion for each levels
 If you need 2 more seconds than any% to get the 60% reward on level 3 you'll write 2000 inside the array on 2nd col, 3rd row
 -1 is here to tell there is no solution in this level with this category.
@@ -57,63 +57,65 @@ int values[UNIT][5] = {
     {0, 0, 0, 3000, 8000} //4-5 19
     };
 
-/** Once level categories is set, playgame will check if the solution is possible to finish the game
-Basically it just check about medals needed. You need 5 medals to go to world 2, 10 to world 3, 15 to world 4 and 25 to finish
+/** Once level route is set, playgame will check if the game is finish-able
+Basically it just check about medals needed. You need 5 medals (or more) to go to world 2, 10 to world 3, 15 to world 4 and 25 to end
 @return the sum of time the solution takes, return 0 if the solution is not possible
 **/
-int playgame(int (&data)[UNIT])
+int playgame(int (&route)[UNIT])
 {
     int i;
-    int sum = 0;
+    int sum = 0;        //Sum the number of medals to check if you can finish the game. If yes sum the amount of time
 
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < UNIT; i++)
     {
-        sum += data[i];
-        if (sum < i/5)  //Just to make things with less code. Is equivalent to "after 5 more levels you'll change medals needed by +5"
+        sum += route[i];
+        if (sum < i/5)  //Just to make things with less code. Is equivalent to "after 5 more levels medals needed increase by +5"
             return (0);
     }
-    if (sum != 25) //You could finish the game with more than 25 medals but that would be a waste of time somewhere
+    if (sum != 25)      //You could finish the game with more than 25 medals but that would be a waste of time somewhere
         return (0);
 
     sum = 0;
     for (i = 0; i < UNIT; i++)      //Sum the time it takes
-        sum += values[i][data[i]];
+        sum += values[i][route[i]];
 
     return (sum);
 }
 
 /** Recursive function (read at bottom for more information about how it works)
-"data" is the route, "result" is solutions stored, "time" is time of solutions,
-    "lowest_res" is lowest time, "pos" is level (or depth of the rescursive function) and "total" is number of solutions
+"route" is the list of medal reward for each level. It is set like this [013101324400...]
+    "result" is list of valid route, "time" is list of time for valid routes,
+    "lowest_res" is lowest time found, "pos" is level (or depth of the recursive function) and "total" is number of solutions
 (pos == UNIT) is the point where the route is done, it will check if the route is possible and if so will register the solution
-"else" will create the route and call the function itself
+"else" will set the route and call the function itself
 **/
-void set_data(int (&data)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MAX_RESULT], int &lowest_res, int pos, int &total)
+void set_route(int (&route)[UNIT], int (&result)[MAX_RESULT][UNIT], int (&time)[MAX_RESULT], int &lowest_res, int pos, int &total)
 {
     int i;
     static int res;
 
     if (pos == UNIT)
     {
-        res = playgame(data);   //Route is done, let's check its validity
+        res = playgame(route);   //Route is done, let's check its validity
+    //res > 0 means the route is valid and we check if the time is inside the range
         if (res > 0 && res - lowest_res <= RANGE_TIME && total < MAX_RESULT)
-        {                                       //res > 0 means the route is valid and we check if the time is inside the range
-            total++;
-            for (i = 0; i < UNIT; i++)          //store the result
-                result[total - 1][i] = data[i];
-            time[total - 1] = res;
+        {
+            for (i = 0; i < UNIT; i++)
+                result[total][i] = route[i];    //store the result
+            time[total] = res;
             if (lowest_res > res)   //We update the lowest result
                 lowest_res = res;
+            total++;
         }
     }
     else
     {
         for (i = 0; i < 5; i++)     //This will set every possibility for the current level (any% to 100%)
         {
-            data[pos] = i;
-            if (values[pos][data[pos]] == -1)   //If we do this now it makes the program really faster
+            route[pos] = i;
+            if (values[pos][route[pos]] == -1)   //If we do this now it makes the program really faster
                 continue;
-            set_data(data, result, time, lowest_res, pos + 1, total);   //The self-call with pos + 1 to go through every level
+            set_route(route, result, time, lowest_res, pos + 1, total);   //The self-call with pos + 1 to go through every level
         }
     }
 }
@@ -122,7 +124,7 @@ int main()
 {
     int i;
     int j;
-    int data[UNIT];                 //Store the route
+    int route[UNIT];                //Store the route
     int result[MAX_RESULT][UNIT];   //Store all valid routes
     int time[MAX_RESULT] = {0};     //Store the time of solutions
     int lowest_res = 12345678;      //Store the time of the lowest solution     Related to RANGE_TIME
@@ -132,13 +134,21 @@ int main()
     clock_t time_end;
 
     time_start = clock();           //Start the timer
-    set_data(data, result, time, lowest_res, 0, total); //Everything begins with this
+    set_route(route, result, time, lowest_res, 0, total); /** Everything **/
     time_end = clock();             //End the timer
+
+    cout << endl;
+    if (total == 0)
+    {
+        cout << "No route found. Change parameters and retry" << endl;
+        return (0);
+    }
 
     if (ENB_DIFF == 1)              //Store the first result for diff
         for (i = 0; i < UNIT; i++)
             diff[i] = result[total - 1][i];
 
+    total = 0;
     for (i = 0; (i < MAX_RESULT) && (time[i] > 0); i++)     //Display all the solutions
     {
         if (time[i] - lowest_res <= RANGE_TIME)
@@ -150,24 +160,25 @@ int main()
                     diff[j] = -1;                               //-1 means there is a diff
             }
             cout << " " << time[i] << " +" << time[i] - lowest_res << endl;
+            total++;
         }
     }
-    
-    if (ENB_DIFF == 1)
+
+    if (ENB_DIFF == 1 && total > 1)
     {
         for (i = 0; i < UNIT; i++)     //Display the diff result
         {
-            if (diff[i] != -1)
-                cout << diff[i];
+            if (diff[i] == -1)
+                cout << "^";
             else
                 cout << " ";
         }
-        cout << " <= diff" << endl;
+        cout << " <- diff" << endl;
     }
-    
+
     if (total >= MAX_RESULT)
-        cout << endl << "TOTAL exceded MAX_RESULT   Increase MAX_RESULT or descrease RANGE_TIME" << endl; 
-    cout << endl << "Calul done in " << time_end - time_start << "ms with " << total << " solutions" << endl;
+        cout << endl << "TOTAL exceded MAX_RESULT   Increase MAX_RESULT or descrease RANGE_TIME" << endl;
+    cout << endl << "Calcul done in " << time_end - time_start << "ms" << endl;
 
     return (0);
 }
@@ -175,10 +186,10 @@ int main()
 /**
 About the recursive function, if you don't know what it is the best is to look up on internet.
 It's kinda hard to explain and it's not the best to do this here with just plain text.
-set_data (the recursive function) is made to set every possibilities
+set_route (the recursive function) is made to set every possibilities
 If you would like to do the same without a recursive function you could write something like 20 "for loops" inside themselves,
     which is not really good looking and efficient.
-With set_data I am able to optimize how it has to be done especially with the "-1".
+With set_route I am able to optimize how it has to be done especially with the "-1".
     If some level has a -1 for its category it means you can skip to the next category, their is no meaning to compute an invalid route
 I'm not a master of C++, if you have recommendation about the code don't hesitate to talk.
 Just keep in mind this is a small program for a unique purpose, I won't make a GUI for it.
