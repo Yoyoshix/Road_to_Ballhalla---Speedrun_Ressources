@@ -69,7 +69,7 @@ int playgame(int (&route)[UNIT])
     for (i = 0; i < UNIT; i++)
     {
         sum += route[i];
-        if (sum < i/5)  //Is equivalent to "after 5 levels, medals needed increase by +5"
+        if (sum < (i/5)*5)  //Is equivalent to "after 5 levels, medals needed increase by +5"
             return (0);
     }
     if (sum != 25)      //You could finish the game with more than 25 medals but that would be a waste of time somewhere
