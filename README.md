@@ -6,19 +6,19 @@ Feel free to use any of these ressources
 There is currently 4 files :
 
 In Main :
-- "RouteOptimizer.cpp"
+- "RouteOptimizer.cpp" -
 Enter your times for every level, the program will find the best route
-  If you don't have a C++ compiler you can go to http://cpp.sh and copy the code here
+If you don't have a C++ compiler you can go to http://cpp.sh and copy the code here
 
 In LiveSplit Ressources :
-- "autosplit.asl"
+- "autosplit.asl" -
 Script working for LiveSplit. It can detect when you enter a level which make an autosplit during your runs.
 Very useful to have a good comparison level to level but doesn't detect the start neither the ending of a run.
   
-- "RtB - layout.ssl"
+- "RtB - layout.ssl" -
 The layout I used during my runs
 
-- "RtB - splits.ssl"
+- "RtB - splits.ssl" -
 Splits time of last attempts to beat the 19:51 run
 
 <=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>
