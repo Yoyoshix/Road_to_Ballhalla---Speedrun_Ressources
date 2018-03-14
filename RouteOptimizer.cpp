@@ -18,17 +18,17 @@ using namespace std;
 /**
 UNIT is number of element, just let this at 20 because there will always be 20 levels
 MAX_RESULT is needed to limit arrays size. Let it at 1000, that's enough. Less could create problem
-RANGE_TIME is here to limit results. It will simply not show solutions which are 3000ms (default) longer than the lowest solution
+RANGE_TIME is here to limit results. It will not show solutions which are 3000ms (default) longer than the lowest solution
 ENB_DIFF is a feature that show where all the solutions have the same pattern
     very useful to see which part of the route remain the same whatever the set is
-    If the solutions displayed are [103311] [104311] [103301] ENB_DIFF will display [  ^ ^ ]. The ^ means the solution changed here
+    If the solutions displayed are [103311] [104311] [103301] ENB_DIFF will display [  ^ ^ ]. The ^ means the route changed here
 **/
 #define UNIT 20
 #define MAX_RESULT 1000
 #define RANGE_TIME 3000
 #define ENB_DIFF 1
 
-/** "values" array store the time difference for every level with their any% (no medal). See the spreadsheet to get these values easily
+/** "values" array store the time difference for every level with their any% (no medal). See the spreadsheet to get these values
 In order : "any%, 60%, 80%, 90%, 100%" where the % is the orb completion for each levels
 If you need 2 more seconds than any% to get the 60% reward on level 3 you'll write 2000 inside the array on 2nd col, 3rd row
 -1 is here to tell there is no solution in this level with this category.
@@ -58,7 +58,7 @@ int values[UNIT][5] = {
     };
 
 /** Once level route is set, playgame will check if the game is finish-able
-Basically it just check about medals needed. You need 5 medals (or more) to go to world 2, 10 to world 3, 15 to world 4 and 25 to end
+It just checks about medals needed. You need 5 medals (or more) to go to world 2, 10 to world 3, 15 to world 4 and 25 to finish
 @return the sum of time the solution takes, return 0 if the solution is not possible
 **/
 int playgame(int (&route)[UNIT])
@@ -69,7 +69,7 @@ int playgame(int (&route)[UNIT])
     for (i = 0; i < UNIT; i++)
     {
         sum += route[i];
-        if (sum < i/5)  //Just to make things with less code. Is equivalent to "after 5 more levels medals needed increase by +5"
+        if (sum < i/5)  //Is equivalent to "after 5 levels, medals needed increase by +5"
             return (0);
     }
     if (sum != 25)      //You could finish the game with more than 25 medals but that would be a waste of time somewhere
@@ -186,11 +186,11 @@ int main()
 /**
 About the recursive function, if you don't know what it is the best is to look up on internet.
 It's kinda hard to explain and it's not the best to do this here with just plain text.
-set_route (the recursive function) is made to set every possibilities
-If you would like to do the same without a recursive function you could write something like 20 "for loops" inside themselves,
-    which is not really good looking and efficient.
-With set_route I am able to optimize how it has to be done especially with the "-1".
-    If some level has a -1 for its category it means you can skip to the next category, their is no meaning to compute an invalid route
-I'm not a master of C++, if you have recommendation about the code don't hesitate to talk.
-Just keep in mind this is a small program for a unique purpose, I won't make a GUI for it.
+set_route (the recursive function) is made to set every possibilities of the medals you need to take to finish the level
+If you would doing the same without a recursive function you could write something like 20 "for loops" inside themselves,
+    which is not really good looking and easy to manage
+With "set_route" I am able to optimize how it has to be done especially thanks to the "-1" value.
+    The "-1" means there is no route for this category, we can skip to the next. We won't compute an invalid route...
+I'm not a master of C++, if you have recommendations about the code don't hesitate to talk.
+Thanks for reading :)
 **/
