@@ -23,7 +23,7 @@ In LiveSplit Ressources :
   The layout I used during my runs.
 
 - "RtB - splits.lss" \
-  Splits time of last attempts to beat the 19:51 run
+  Splits time of my last attempts to beat the 19:51 run
 
 <=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>
 
