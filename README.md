@@ -12,7 +12,7 @@ In Main :
 
 - "Ballhalla.sav" \
   Download this file to get access to every part of the game. Useful for training. \
-  The file goes to "C:\Users\<your_name>\AppData\Local\RoadToBallhallaUE4\Saved\SaveGames"
+  The file goes to "C:\Users\\<your_name>\AppData\Local\RoadToBallhallaUE4\Saved\SaveGames"
 
 In LiveSplit Ressources :
 - "autosplit.asl" \
