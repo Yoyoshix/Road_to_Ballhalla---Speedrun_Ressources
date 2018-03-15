@@ -28,7 +28,11 @@ Additionnal links :
   A simple link to my own times accessible on Google Spreadsheet. You can make a copy to create your own. \
   This is the source to get your times for the route optimizer.
   
-- Speedrun.com leaderboard :
+- Speedrun.com leaderboard : https://www.speedrun.com/rtb
   
+- Steam links : \
+  Forum : http://steamcommunity.com/app/425410/discussions/ \
+  Store : http://store.steampowered.com/app/425410 \
+  OST : http://store.steampowered.com/app/489530/Road_to_Ballhalla_Soundtrack/
   
-- Steam links :
+- My best attempt : https://www.youtube.com/watch?v=0-z_v0tS724
