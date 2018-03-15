@@ -3,12 +3,16 @@
 Here you'll get everything I've done for the any% speedrun of Road to Ballhalla.
 Feel free to use any of these ressources
 
-There is currently 4 files :
+There is currently 5 files :
 
 In Main :
 - "RouteOptimizer.cpp" \
   Enter your times for every level, the program will find the best route. \
   If you don't have a C++ compiler you can go to http://cpp.sh and copy the code here.
+
+- "Ballhalla.sav" \
+  Download this file to get access to every part of the game. Useful for training. \
+  The file goes to "C:\Users\<your_name>\AppData\Local\RoadToBallhallaUE4\Saved\SaveGames"
 
 In LiveSplit Ressources :
 - "autosplit.asl" \
