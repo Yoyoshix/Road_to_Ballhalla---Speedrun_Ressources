@@ -19,10 +19,10 @@ In LiveSplit Ressources :
   Script working for LiveSplit. It can detect when you enter a level which make an autosplit during your runs. \
   Very useful to have a good comparison level to level but doesn't detect the start neither the ending of a run.
   
-- "RtB - layout.ssl" \
+- "RtB - layout.lsl" \
   The layout I used during my runs.
 
-- "RtB - splits.ssl" \
+- "RtB - splits.lss" \
   Splits time of last attempts to beat the 19:51 run
 
 <=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>
