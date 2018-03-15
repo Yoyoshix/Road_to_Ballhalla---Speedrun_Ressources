@@ -24,7 +24,7 @@ In LiveSplit Ressources :
 <=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>-<=>
 
 Additionnal links :
-- Google Spreadsheet : https://docs.google.com/spreadsheets/d/1yZXsdOcVkUXkGXPxE29Kr76pAGPo2Y4yyW8Yb1URMw0/edit#gid=0 \
+- Spreadsheet : https://docs.google.com/spreadsheets/d/1yZXsdOcVkUXkGXPxE29Kr76pAGPo2Y4yyW8Yb1URMw0/edit#gid=0 \
   A simple link to my own times accessible on Google Spreadsheet. You can make a copy to create your own. \
   This is the source to get your times for the route optimizer.
   
